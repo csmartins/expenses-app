@@ -7,5 +7,5 @@ class ReceiptRVModal (
     var payment: String,
     var purchaseDate: String,
 //    var description: String,
-    var products: ArrayList<ProductRVModal>,
+//    var products: ArrayList<ProductRVModal>,
 )

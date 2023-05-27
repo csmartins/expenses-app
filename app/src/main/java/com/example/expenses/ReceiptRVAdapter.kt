@@ -16,7 +16,7 @@ internal class ReceiptRVAdapter (
 
     class ReceiptViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val storeNameTV: TextView = itemView.findViewById(R.id.idTVStoreName)
-        val storeTypeTV: TextView = itemView.findViewById(R.id.idTVStoreType)
+        val storeTypeAndDateTV: TextView = itemView.findViewById(R.id.idTVStoreTypeAndDate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceiptViewHolder {
@@ -36,10 +36,23 @@ internal class ReceiptRVAdapter (
         val receiptInfo = receiptList.get(position)
 
         holder.storeNameTV.text = receiptInfo.store
-        holder.storeTypeTV.text = "Mercado"
+        holder.storeTypeAndDateTV.text = "Mercado - " + receiptInfo.purchaseDate
 
+        // below line is use to add on click listener for our item of recycler view.
 //        holder.itemView.setOnClickListener {
-//            val i = Intent(ctx, ...)
+//            // inside on click listener method we are calling a new activity
+//            // and passing all the data of that item in next intent.
+//            val i = Intent(ctx, ReceiptDetailsActivity::class.java)
+//            i.putExtra("store", receiptInfo.store)
+//            i.putExtra("total", receiptInfo.total)
+//            i.putExtra("payment", receiptInfo.payment)
+//
+////            val purchaseDateate = "$receiptInfo.purchaseDate.day-$receiptInfo.purchaseDate.month-$receiptInfo.purchaseDate.year"
+//            i.putExtra("purchaseDate", receiptInfo.purchaseDate)
+////            i.putExtra("products", receiptInfo.products)
+//
+//            // after passing that data we are starting our new intent.
+//            ctx.startActivity(i)
 //        }
     }
 

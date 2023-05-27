@@ -1,25 +1,20 @@
 package com.example.expenses
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.se.omapi.SEService.OnConnectedListener
-import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.HttpResponse
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var loadingPB: ProgressBar
     lateinit var receiptsList: ArrayList<ReceiptRVModal>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         mRecyclerView.adapter = adapter
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun extractReceiptValues(items: JSONArray): ArrayList<ReceiptRVModal> {
         val receipts = ArrayList<ReceiptRVModal>()
         for (i in 0 until items.length()) {
@@ -51,8 +48,8 @@ class MainActivity : AppCompatActivity() {
             val tmpTotal = item.optString("total").replace(',','.')
             val total = tmpTotal.toDouble()
             val payment = item.optString("payment")
-            val purchaseDate = item.optString("datetime")
-
+            val tmpDate = item.optString("datetime")
+            val purchaseDate = tmpDate.take(16)
             val productsArrayList: ArrayList<ProductRVModal> = ArrayList()
             val productsArray = item.getJSONArray("products")
             if (productsArray.length() != 0) {
@@ -79,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 total,
                 payment,
                 purchaseDate,
-                productsArrayList
+//                productsArrayList
             )
             receipts.add(receipt)
         }
@@ -87,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         return receipts
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getReceiptsData(): ArrayList<ReceiptRVModal> {
         receiptsList = ArrayList()
         val url = "http://10.0.2.2:8000/api/receipts"
