@@ -6,6 +6,7 @@ class ReceiptRVModal (
     var total: Double,
     var payment: String,
     var purchaseDate: String,
+    var thumbnail : String,
 //    var description: String,
 //    var products: ArrayList<ProductRVModal>,
 )

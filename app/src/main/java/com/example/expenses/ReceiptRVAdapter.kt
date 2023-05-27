@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -17,6 +18,7 @@ internal class ReceiptRVAdapter (
     class ReceiptViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val storeNameTV: TextView = itemView.findViewById(R.id.idTVStoreName)
         val storeTypeAndDateTV: TextView = itemView.findViewById(R.id.idTVStoreTypeAndDate)
+        val storeIV: ImageView = itemView.findViewById(R.id.idIVStore)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceiptViewHolder {
@@ -38,6 +40,7 @@ internal class ReceiptRVAdapter (
         holder.storeNameTV.text = receiptInfo.store
         holder.storeTypeAndDateTV.text = "Mercado - " + receiptInfo.purchaseDate
 
+        Picasso.get().load(receiptInfo.thumbnail).into(holder.storeIV);
         // below line is use to add on click listener for our item of recycler view.
 //        holder.itemView.setOnClickListener {
 //            // inside on click listener method we are calling a new activity

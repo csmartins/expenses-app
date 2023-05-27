@@ -21,6 +21,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var mRequestQueue: RequestQueue
     lateinit var loadingPB: ProgressBar
     lateinit var receiptsList: ArrayList<ReceiptRVModal>
+    val storesThumbs = mapOf(
+        "HORTIFRUTI" to "https://hortifruti.com.br/venia-static/icons/hortifruti_192.png",
+        "RAIADROGASIL" to "https://logodownload.org/wp-content/uploads/2018/01/droga-raia-logo.png",
+        "LEADER" to "https://institucional.lojasleader.com.br/wp-content/uploads/2022/06/logo-slogan-vermelho.jpg",
+//        "LEADER" to "https://institucional.lojasleader.com.br/wp-content/uploads/2022/04/Leader-Slogan-01.png",
+        "PACHECO" to "https://logodownload.org/wp-content/uploads/2022/08/drogarias-pacheco-logo-4.png",
+        "Mundial" to "https://rjempregos.net/wp-content/uploads/2023/02/supermercados-mundial.png",
+        "ZONA SUL" to "https://classificadosbarra.com.br/wp-content/uploads/2021/04/supermercadosZonaSul.png",
+    )
+
+    val DEFAULT_STORE_THUMB = "https://bolademeia.org/wp-content/uploads/2020/02/Lojinha-do-Bola.png"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,18 +81,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            val thumbnail = getThumbImage(store)
+
             val receipt = ReceiptRVModal(
                 url,
                 store,
                 total,
                 payment,
                 purchaseDate,
+                thumbnail,
 //                productsArrayList
             )
             receipts.add(receipt)
         }
 
         return receipts
+    }
+
+    private fun getThumbImage(store: String): String {
+        val stores = storesThumbs.keys.toList()
+        val thumbKey = stores.find{ item -> item in store}
+        return storesThumbs.getOrDefault(thumbKey, DEFAULT_STORE_THUMB)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
