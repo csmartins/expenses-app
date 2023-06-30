@@ -90,7 +90,8 @@ class MainActivity : AppCompatActivity() {
                 payment,
                 purchaseDate,
                 thumbnail,
-//                productsArrayList
+                productsArrayList,
+                productsArrayList.size
             )
             receipts.add(receipt)
         }

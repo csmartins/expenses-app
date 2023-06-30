@@ -42,21 +42,22 @@ internal class ReceiptRVAdapter (
 
         Picasso.get().load(receiptInfo.thumbnail).into(holder.storeIV);
         // below line is use to add on click listener for our item of recycler view.
-//        holder.itemView.setOnClickListener {
-//            // inside on click listener method we are calling a new activity
-//            // and passing all the data of that item in next intent.
-//            val i = Intent(ctx, ReceiptDetailsActivity::class.java)
-//            i.putExtra("store", receiptInfo.store)
-//            i.putExtra("total", receiptInfo.total)
-//            i.putExtra("payment", receiptInfo.payment)
-//
-////            val purchaseDateate = "$receiptInfo.purchaseDate.day-$receiptInfo.purchaseDate.month-$receiptInfo.purchaseDate.year"
-//            i.putExtra("purchaseDate", receiptInfo.purchaseDate)
-////            i.putExtra("products", receiptInfo.products)
-//
-//            // after passing that data we are starting our new intent.
-//            ctx.startActivity(i)
-//        }
+        holder.itemView.setOnClickListener {
+            // inside on click listener method we are calling a new activity
+            // and passing all the data of that item in next intent.
+            val i = Intent(ctx, ReceiptDetailsActivity::class.java)
+            i.putExtra("store", receiptInfo.store)
+            i.putExtra("total", receiptInfo.total)
+            i.putExtra("payment", receiptInfo.payment)
+            i.putExtra("marketLogoLink", receiptInfo.thumbnail)
+//            val purchaseDateate = "$receiptInfo.purchaseDate.day-$receiptInfo.purchaseDate.month-$receiptInfo.purchaseDate.year"
+            i.putExtra("purchaseDate", receiptInfo.purchaseDate)
+            i.putExtra("products", receiptInfo.products)
+            i.putExtra("countProducts", receiptInfo.countProducts)
+
+            // after passing that data we are starting our new intent.
+            ctx.startActivity(i)
+        }
     }
 
 }
