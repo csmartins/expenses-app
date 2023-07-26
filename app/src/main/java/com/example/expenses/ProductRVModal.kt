@@ -4,11 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class ProductRVModal (
+    var productName: String?,
+    var productType: String?,
     var productQuantity: Double,
     var unityType: String?,
     var totalValue: Double,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
         parcel.readDouble(),
         parcel.readString(),
         parcel.readDouble()
@@ -16,6 +20,8 @@ class ProductRVModal (
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(productName)
+        parcel.writeString(productType)
         parcel.writeDouble(productQuantity)
         parcel.writeString(unityType)
         parcel.writeDouble(totalValue)

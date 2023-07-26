@@ -1,8 +1,11 @@
 package com.example.expenses
 
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.RequestQueue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
+//import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mRequestQueue: RequestQueue
     lateinit var loadingPB: ProgressBar
     lateinit var receiptsList: ArrayList<ReceiptRVModal>
+//    lateinit var mAddReceiptButton: FloatingActionButton
     val storesThumbs = mapOf(
         "HORTIFRUTI" to "https://hortifruti.com.br/venia-static/icons/hortifruti_192.png",
         "RAIADROGASIL" to "https://logodownload.org/wp-content/uploads/2018/01/droga-raia-logo.png",
@@ -37,7 +42,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//
+
+//        mAddReceiptButton = findViewById(R.id.addReceipt)
+//        mAddReceiptButton.setOnClickListener(View.OnClickListener {
+//            var ctx: Context
+//            val i = Intent(this, QRCodeScannerActivity::class.java)
+//            this.startActivity(i)
+//        })
 //        loadingPB = findViewById(R.id.idLoadingPB)
 //        loadingPB.visibility = View.VISIBLE
         receiptsList = getReceiptsData()
@@ -66,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             if (productsArray.length() != 0) {
                 for (j in 0 until productsArray.length()) {
                     val productItem = productsArray.getJSONObject(j)
+                    val productName = productItem.optString("name")
+                    val productType = productItem.optString("type")
                     val tmpQuantity = productItem.optString("product_quantity").replace(',','.')
                     val productQuantity = tmpQuantity.toDouble()
                     val productUnitType = productItem.optString("unity_type")
@@ -73,6 +86,8 @@ class MainActivity : AppCompatActivity() {
                     val productValue = tmpValue.toDouble()
 
                     val product = ProductRVModal(
+                        productName,
+                        productType,
                         productQuantity,
                         productUnitType,
                         productValue

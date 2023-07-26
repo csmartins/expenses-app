@@ -42,8 +42,8 @@ internal class ProductsRVAdapter (
         val productInfo = productsList.get(position)
         Picasso.get().load(GENERIC_PRODUCT_IMAGE).into(holder.productIV)
 
-        holder.productNameTV.text = "Biscoito da Vaquinha"
-        holder.productTypeTV.text = "Bixcoito"
+        holder.productNameTV.text = productInfo.productName.toString()
+        holder.productTypeTV.text = productInfo.productType.toString()
         holder.productQuantityTV.text = "Quantidade: ${productInfo.productQuantity.toString()} ${productInfo.unityType}"
 //        holder.productUnityTV.text = productInfo.unityType
         holder.productPricesTV.text = "Valor: R$ %.2f".format(productInfo.totalValue)
