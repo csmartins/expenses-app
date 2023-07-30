@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.RequestQueue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
-//import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mRequestQueue: RequestQueue
     lateinit var loadingPB: ProgressBar
     lateinit var receiptsList: ArrayList<ReceiptRVModal>
-//    lateinit var mAddReceiptButton: FloatingActionButton
+    lateinit var mAddReceiptButton: FloatingActionButton
     val storesThumbs = mapOf(
         "HORTIFRUTI" to "https://hortifruti.com.br/venia-static/icons/hortifruti_192.png",
         "RAIADROGASIL" to "https://logodownload.org/wp-content/uploads/2018/01/droga-raia-logo.png",
@@ -43,12 +43,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        mAddReceiptButton = findViewById(R.id.addReceipt)
-//        mAddReceiptButton.setOnClickListener(View.OnClickListener {
-//            var ctx: Context
-//            val i = Intent(this, QRCodeScannerActivity::class.java)
-//            this.startActivity(i)
-//        })
+        mAddReceiptButton = findViewById(R.id.addReceipt)
+        mAddReceiptButton.setOnClickListener(View.OnClickListener {
+            var ctx: Context
+            val i = Intent(this, QRCodeScannerActivity::class.java)
+            this.startActivity(i)
+        })
 //        loadingPB = findViewById(R.id.idLoadingPB)
 //        loadingPB.visibility = View.VISIBLE
         receiptsList = getReceiptsData()
