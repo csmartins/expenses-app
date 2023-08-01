@@ -7,8 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,104 +17,107 @@ import com.example.expenses.ui.theme.QRCodeScannerTheme
 import android.Manifest
 import android.util.Size
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-import androidx.camera.core.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import javax.inject.Inject
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.expenses.ui.theme.lightestGray
+import com.example.expenses.ui.theme.primary
+import kotlinx.coroutines.launch
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 
-class QRCodeScannerActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class QRCodeScannerActivity : ComponentActivity() {
+    @Inject
+    lateinit var qrCodeScanner: QRCodeScanner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             QRCodeScannerTheme {
-                var code by remember {
-                    mutableStateOf("")
-                }
-                var hasReadCode by remember {
-                    mutableStateOf(false)
-                }
-                val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
-                val cameraProviderFeature = remember {
-                    ProcessCameraProvider.getInstance(context)
-                }
-                var hasCamPermission by remember {
-                    mutableStateOf(
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.CAMERA
-                        ) == PackageManager.PERMISSION_GRANTED
-                    )
-                }
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = { granted ->
-                        hasCamPermission = granted
-                    }
-                )
-                LaunchedEffect(key1 = true) {
-                    launcher.launch(Manifest.permission.CAMERA)
-                }
-                Column(
-                    modifier = Modifier.fillMaxSize()
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = primary
                 ) {
-                    if (hasCamPermission) {
-                        if (hasReadCode) {
-//                            LoadWebUrl(code)
-                            Toast.makeText(this@QRCodeScannerActivity, code, Toast.LENGTH_LONG).show()
-                        } else {
-                            AndroidView(
-                                factory = { context ->
-                                    val previewView = PreviewView(context)
-                                    val preview = Preview.Builder().build()
-                                    val selector = CameraSelector.Builder()
-                                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                                        .build()
-                                    preview.setSurfaceProvider(previewView.surfaceProvider)
-                                    val imageAnalysis = ImageAnalysis.Builder()
-                                        .setTargetResolution(
-                                            Size(
-                                                previewView.width,
-                                                previewView.height
-                                            )
-                                        )
-                                        .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                                        .build()
-                                    imageAnalysis.setAnalyzer(
-                                        ContextCompat.getMainExecutor(context),
-                                        QRCodeAnalyzer { result ->
-                                            code = result
-                                            hasReadCode = true
-                                        }
-                                    )
-                                    try {
-                                        cameraProviderFeature.get().bindToLifecycle(
-                                            lifecycleOwner,
-                                            selector,
-                                            preview,
-                                            imageAnalysis
-                                        )
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                    }
-                                    previewView
-                                },
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
+
+                    val barcodeResults =
+                        qrCodeScanner.barCodeResults.collectAsStateWithLifecycle()
+
+                    ScanBarcode(
+                        qrCodeScanner::startScan,
+                        barcodeResults.value
+                    )
                 }
             }
         }
     }
-//    @Composable
-//    fun LoadWebUrl(url: String) {
-//        AndroidView(factory = {
-//            WebView(this).apply {
-//                webViewClient = WebViewClient()
-//                loadUrl(url)
-//            }
-//        })
-//    }
+}
+@Composable
+private fun ScanBarcode(
+    onScanBarcode: suspend () -> Unit,
+    barcodeValue: String?
+) {
+    val scope = rememberCoroutineScope()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(.85f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Black
+            ),
+            onClick = {
+                scope.launch {
+                    onScanBarcode()
+                }
+            }) {
+            Text(
+                text = "Scan Barcode",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayMedium,
+                color = lightestGray,
+                //style = TextStyle(fontWeight = FontWeight.Bold)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = barcodeValue ?: "0000000000",
+            style = MaterialTheme.typography.displayMedium
+        )
+
+    }
+}
+
+@Preview
+@Composable
+fun PreviewScanBarcode() {
+    QRCodeScannerTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = primary
+        ) {
+
+            ScanBarcode({}, null)
+        }
+    }
 }

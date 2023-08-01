@@ -123,7 +123,6 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getReceiptsData(): ArrayList<ReceiptRVModal> {
         receiptsList = ArrayList()
-        val url = "http://10.0.2.2:8000/api/receipts"
 
         val httpAsync = Fuel.get("http://10.0.2.2:8000/api/receipts")
             .responseString() { request, response, result ->
