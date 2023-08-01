@@ -74,7 +74,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation 'com.google.mlkit:barcode-scanning:17.0.3'
-    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.google.zxing:core:3.4.0'
 
     def nav_version = "2.6.0"
     implementation "androidx.navigation:navigation-compose:$nav_version"

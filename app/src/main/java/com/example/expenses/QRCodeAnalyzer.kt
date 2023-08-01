@@ -17,15 +17,18 @@ class QRCodeAnalyzer(
         ImageFormat.YUV_422_888,
         ImageFormat.YUV_444_888
     )
+    private val reader = MultiFormatReader().apply {
+        setHints(
+            mapOf(
+                DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
+                    BarcodeFormat.QR_CODE
+                )
+            )
+        )
+    }
 
     override fun analyze(image: ImageProxy) {
         if (image.format in supportedImageFormats && image.planes.size == 3) {
-//            image.planes.first().buffer
-//            val planes = image.planes
-//            val plane = planes.first()
-//            val buffer = plane.buffer
-//            val bytes = ByteArray(buffer.capacity()).also { buffer.get(it) }
-
             val rotatedImage = RotatedImage(getLuminancePlaneData(image), image.width, image.height)
             rotateImageArray(rotatedImage, image.imageInfo.rotationDegrees)
 
@@ -42,15 +45,7 @@ class QRCodeAnalyzer(
             val hybridBinarizer = HybridBinarizer(planarYUVLuminanceSource)
             val binaryBmp = BinaryBitmap(hybridBinarizer)
             try {
-                val result = MultiFormatReader().apply {
-                    setHints(
-                        mapOf(
-                            DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                                BarcodeFormat.QR_CODE
-                            )
-                        )
-                    )
-                }.decodeWithState(binaryBmp)
+                val result = reader.decodeWithState(binaryBmp)
                 Log.d("Barcode:", result.text)
                 onQrCodeScanned(result.text)
 
