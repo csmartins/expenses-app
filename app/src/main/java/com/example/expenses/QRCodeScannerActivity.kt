@@ -34,6 +34,7 @@ import com.example.expenses.ui.theme.lightestGray
 import com.example.expenses.ui.theme.primary
 import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.expenses.ui.theme.Teal200
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +51,6 @@ class QRCodeScannerActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = primary
                 ) {
-
                     val barcodeResults =
                         qrCodeScanner.barCodeResults.collectAsStateWithLifecycle()
 
@@ -81,7 +81,7 @@ private fun ScanBarcode(
             modifier = Modifier
                 .fillMaxWidth(.85f),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black
+                containerColor = Teal200
             ),
             onClick = {
                 scope.launch {
@@ -89,20 +89,38 @@ private fun ScanBarcode(
                 }
             }) {
             Text(
-                text = "Scan Barcode",
+                text = "Adicionar nota fiscal via QRCode",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium,
-                color = lightestGray,
+                style = MaterialTheme.typography.displaySmall,
+                color = Color.Black,
                 //style = TextStyle(fontWeight = FontWeight.Bold)
             )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text(
-            text = barcodeValue ?: "0000000000",
-            style = MaterialTheme.typography.displayMedium
-        )
+//        Text(
+//            text = barcodeValue ?: "0000000000",
+//            style = MaterialTheme.typography.displaySmall
+//        )
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(.85f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Teal200
+            ),
+            onClick = {
+
+            }) {
+            Text(
+                text = "Adicionar nota fiscal via Chave de Acesso",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displaySmall,
+                color = Color.Black,
+                //style = TextStyle(fontWeight = FontWeight.Bold)
+            )
+        }
 
     }
 }
