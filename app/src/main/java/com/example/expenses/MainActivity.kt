@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -65,50 +66,54 @@ class MainActivity : AppCompatActivity() {
         val receipts = ArrayList<ReceiptRVModal>()
         for (i in 0 until items.length()) {
             val item = items.getJSONObject(i)
-            val url = item.optString("url")
-            val store = item.optString("store")
-            val tmpTotal = item.optString("total").replace(',','.')
-            val total = tmpTotal.toDouble()
-            val payment = item.optString("payment")
-            val tmpDate = item.optString("datetime")
-            val purchaseDate = tmpDate.take(16)
-            val productsArrayList: ArrayList<ProductRVModal> = ArrayList()
-            val productsArray = item.getJSONArray("products")
-            if (productsArray.length() != 0) {
-                for (j in 0 until productsArray.length()) {
-                    val productItem = productsArray.getJSONObject(j)
-                    val productName = productItem.optString("name")
-                    val productType = productItem.optString("type")
-                    val tmpQuantity = productItem.optString("product_quantity").replace(',','.')
-                    val productQuantity = tmpQuantity.toDouble()
-                    val productUnitType = productItem.optString("unity_type")
-                    val tmpValue = productItem.optString("total_value").replace(',','.')
-                    val productValue = tmpValue.toDouble()
 
-                    val product = ProductRVModal(
-                        productName,
-                        productType,
-                        productQuantity,
-                        productUnitType,
-                        productValue
-                    )
-                    productsArrayList.add(product)
+            if (item.optString("store") != "" || item.optString("total") != "" ){
+                val url = item.optString("url")
+                val store = item.optString("store")
+                val tmpTotal = item.optString("total").replace(',','.')
+                val total = tmpTotal.toDouble()
+                val payment = item.optString("payment")
+                val tmpDate = item.optString("datetime")
+                val purchaseDate = tmpDate.take(16)
+                val productsArrayList: ArrayList<ProductRVModal> = ArrayList()
+                val productsArray = item.getJSONArray("products")
+                if (productsArray.length() != 0) {
+                    for (j in 0 until productsArray.length()) {
+                        val productItem = productsArray.getJSONObject(j)
+                        val productName = productItem.optString("name")
+                        val productType = productItem.optString("type")
+                        val tmpQuantity = productItem.optString("product_quantity").replace(',','.')
+                        val productQuantity = tmpQuantity.toDouble()
+                        val productUnitType = productItem.optString("unity_type")
+                        val tmpValue = productItem.optString("total_value").replace(',','.')
+                        val productValue = tmpValue.toDouble()
+
+                        val product = ProductRVModal(
+                            productName,
+                            productType,
+                            productQuantity,
+                            productUnitType,
+                            productValue
+                        )
+                        productsArrayList.add(product)
+                    }
                 }
+
+                val thumbnail = getThumbImage(store)
+
+                val receipt = ReceiptRVModal(
+                    url,
+                    store,
+                    total,
+                    payment,
+                    purchaseDate,
+                    thumbnail,
+                    productsArrayList,
+                    productsArrayList.size
+                )
+                receipts.add(receipt)
             }
 
-            val thumbnail = getThumbImage(store)
-
-            val receipt = ReceiptRVModal(
-                url,
-                store,
-                total,
-                payment,
-                purchaseDate,
-                thumbnail,
-                productsArrayList,
-                productsArrayList.size
-            )
-            receipts.add(receipt)
         }
 
         return receipts
@@ -124,7 +129,8 @@ class MainActivity : AppCompatActivity() {
     private fun getReceiptsData(): ArrayList<ReceiptRVModal> {
         receiptsList = ArrayList()
 
-        val httpAsync = Fuel.get("http://10.0.2.2:8000/api/receipts")
+//        val httpAsync = Fuel.get("http://10.0.2.2:8000/api/receipts")
+        val httpAsync = Fuel.get("http://192.168.0.11:8000/api/receipts")
             .responseString() { request, response, result ->
                 request.header("Accept", "application/json")
                 when (result) {
@@ -136,6 +142,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         val itemsString = result.get()
+                        Log.d("Main:", itemsString)
                         val items = JSONObject(itemsString)
                         val receipts = items.getJSONArray("receipts")
                         receiptsList = extractReceiptValues(receipts)

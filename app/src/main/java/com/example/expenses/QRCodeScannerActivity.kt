@@ -15,6 +15,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.expenses.ui.theme.QRCodeScannerTheme
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.util.Log
 import android.util.Size
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -36,12 +39,14 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.expenses.ui.theme.Teal200
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.currentCoroutineContext
 
 @AndroidEntryPoint
 class QRCodeScannerActivity : ComponentActivity() {
     @Inject
     lateinit var qrCodeScanner: QRCodeScanner
 
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -53,10 +58,10 @@ class QRCodeScannerActivity : ComponentActivity() {
                 ) {
                     val barcodeResults =
                         qrCodeScanner.barCodeResults.collectAsStateWithLifecycle()
-
+//                    val apiResult = qrCodeScanner.receiptAPIResult
                     ScanBarcode(
                         qrCodeScanner::startScan,
-                        barcodeResults.value
+//                        qrCodeScanner.receiptAPIResult
                     )
                 }
             }
@@ -66,10 +71,10 @@ class QRCodeScannerActivity : ComponentActivity() {
 @Composable
 private fun ScanBarcode(
     onScanBarcode: suspend () -> Unit,
-    barcodeValue: String?
+//    receiptAPIResult: String?
 ) {
     val scope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -95,14 +100,10 @@ private fun ScanBarcode(
                 color = Color.Black,
                 //style = TextStyle(fontWeight = FontWeight.Bold)
             )
+//            showResultMessage(context, "Nota fiscal enviada. Veja o status da extracao na tela inicial")
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-
-//        Text(
-//            text = barcodeValue ?: "0000000000",
-//            style = MaterialTheme.typography.displaySmall
-//        )
 
         Button(
             modifier = Modifier
@@ -122,9 +123,16 @@ private fun ScanBarcode(
             )
         }
 
+//        Text(
+//            text = receiptAPIResult ?: "",
+//            style = MaterialTheme.typography.displaySmall,
+//        )
     }
 }
 
+fun showResultMessage(context: Context, message:String){
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
 @Preview
 @Composable
 fun PreviewScanBarcode() {
@@ -135,7 +143,7 @@ fun PreviewScanBarcode() {
             color = primary
         ) {
 
-            ScanBarcode({}, null)
+            ScanBarcode({})
         }
     }
 }
