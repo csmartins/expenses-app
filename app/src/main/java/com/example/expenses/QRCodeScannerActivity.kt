@@ -70,7 +70,7 @@ class QRCodeScannerActivity : ComponentActivity() {
 }
 @Composable
 private fun ScanBarcode(
-    onScanBarcode: suspend () -> Unit,
+    onScanBarcode: suspend () -> Unit
 //    receiptAPIResult: String?
 ) {
     val scope = rememberCoroutineScope()
@@ -115,7 +115,7 @@ private fun ScanBarcode(
 
             }) {
             Text(
-                text = "Adicionar nota fiscal via Chave de Acesso",
+                text = "Adicionar nota fiscal digitando Chave de Acesso",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displaySmall,
                 color = Color.Black,
@@ -147,3 +147,23 @@ fun PreviewScanBarcode() {
         }
     }
 }
+
+//fun AccessKeyForm() {
+//    var textState by remember { mutableStateOf("Hello") }
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        TextField(
+//            value = textState,
+//            singleLine = true,
+//            modifier = Modifier.fillMaxWidth(),
+//            onValueChange = { textState=it },
+//            label = { Text(text = "Entre a chave de acesso") }
+//        )
+////        mainUiState.currentNameErrors.forEach {
+////            Text(
+////                modifier = Modifier.padding(vertical = 8.dp),
+////                text = it,
+////                color = Color.Red
+////            )
+////        }
+//    }
+//}

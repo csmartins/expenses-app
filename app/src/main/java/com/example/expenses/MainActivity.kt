@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,19 @@ class MainActivity : AppCompatActivity() {
     lateinit var mRequestQueue: RequestQueue
     lateinit var loadingPB: ProgressBar
     lateinit var receiptsList: ArrayList<ReceiptRVModal>
+
+    // Floating buttons
     lateinit var mAddReceiptButton: FloatingActionButton
+    private lateinit var mAddFab: FloatingActionButton
+    private lateinit var mAddReceiptQRCodeFab: FloatingActionButton
+    private lateinit var mAddReceiptAccessKeyFab: FloatingActionButton
+
+    // These are taken to make visible and invisible along with FABs
+    private lateinit var addReceiptQRCodeActionText: TextView
+    private lateinit var addReceiptAccessKeyActionText: TextView
+    // to check whether sub FAB buttons are visible or not.
+    private var isAllFabsVisible: Boolean? = null
+
     val storesThumbs = mapOf(
         "HORTIFRUTI" to "https://hortifruti.com.br/venia-static/icons/hortifruti_192.png",
         "RAIADROGASIL" to "https://logodownload.org/wp-content/uploads/2018/01/droga-raia-logo.png",
@@ -44,14 +57,53 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mAddReceiptButton = findViewById(R.id.addReceipt)
-        mAddReceiptButton.setOnClickListener(View.OnClickListener {
+        mAddFab = findViewById(R.id.addFAB)
+        mAddReceiptQRCodeFab = findViewById(R.id.addReceiptQRCode)
+        mAddReceiptAccessKeyFab = findViewById(R.id.addReceiptAccessKey)
+
+        addReceiptQRCodeActionText = findViewById(R.id.add_qrcode_action_text)
+        addReceiptAccessKeyActionText = findViewById(R.id.add_access_key_action_text)
+
+        mAddReceiptQRCodeFab.visibility = View.GONE
+        mAddReceiptAccessKeyFab.visibility = View.GONE
+        addReceiptQRCodeActionText.visibility = View.GONE
+        addReceiptAccessKeyActionText.visibility = View.GONE
+        isAllFabsVisible = false
+
+        mAddFab.setOnClickListener(View.OnClickListener {
+            (if (!isAllFabsVisible!!) {
+                mAddReceiptQRCodeFab.show()
+                mAddReceiptAccessKeyFab.show()
+                addReceiptQRCodeActionText.visibility = View.VISIBLE
+                addReceiptAccessKeyActionText.visibility = View.VISIBLE
+
+                true
+            } else {
+                mAddReceiptQRCodeFab.hide()
+                mAddReceiptAccessKeyFab.hide()
+                addReceiptQRCodeActionText.visibility = View.GONE
+                addReceiptAccessKeyActionText.visibility = View.GONE
+
+                false
+            }).also { isAllFabsVisible = it }
+        })
+
+        mAddReceiptQRCodeFab.setOnClickListener(View.OnClickListener {
             var ctx: Context
             val i = Intent(this, QRCodeScannerActivity::class.java)
             this.startActivity(i)
         })
+
+//        mAddReceiptButton = findViewById(R.id.addReceipt)
+//        mAddReceiptButton.setOnClickListener(View.OnClickListener {
+//            var ctx: Context
+//            val i = Intent(this, QRCodeScannerActivity::class.java)
+//            this.startActivity(i)
+//        })
+
 //        loadingPB = findViewById(R.id.idLoadingPB)
 //        loadingPB.visibility = View.VISIBLE
+
         receiptsList = getReceiptsData()
         val adapter = ReceiptRVAdapter(receiptsList, this@MainActivity)
         val layoutManager = LinearLayoutManager(this)

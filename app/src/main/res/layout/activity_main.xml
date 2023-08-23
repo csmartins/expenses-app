@@ -31,8 +31,24 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_height="match_parent" />
     </LinearLayout>
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/addReceipt"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:src="@drawable/baseline_add_24"-->
+<!--        app:fabSize="normal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+    <!-- This will be the parent Floating Action Button -->
+    <!-- After the implementation the Floating Action Button
+         at the bottom right corner -->
+    <!-- After clicking the above button the following two buttons
+         will pop up. So this button is considered as parent FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addReceipt"
+        android:id="@+id/addFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -41,7 +57,61 @@
         android:src="@drawable/baseline_add_24"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Floating action button for add alarm -->
+    <!-- Make sure that you are constraining this
+         button to the parent button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addReceiptQRCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/addFAB"
+        app:layout_constraintEnd_toEndOf="@+id/addFAB"
+        app:layout_constraintStart_toStartOf="@+id/addFAB"
+        app:srcCompat="@drawable/baseline_qr_code_scanner_24" />
+
+    <!-- Action name text for the add alarm button -->
+    <!-- Make sure that you are constraining this Text to
+         the add Alarm FAB button -->
+    <TextView
+        android:id="@+id/add_qrcode_action_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Adicionar nota com QRCode"
+        app:layout_constraintBottom_toBottomOf="@+id/addReceiptQRCode"
+        app:layout_constraintEnd_toStartOf="@+id/addReceiptQRCode"
+        app:layout_constraintTop_toTopOf="@+id/addReceiptQRCode" />
+
+    <!-- Floating action button for add person -->
+    <!-- Make sure that you are constraining this
+         button to the add Alarm FAB button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addReceiptAccessKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/addReceiptQRCode"
+        app:layout_constraintEnd_toEndOf="@+id/addReceiptQRCode"
+        app:layout_constraintStart_toStartOf="@+id/addReceiptQRCode"
+        app:srcCompat="@drawable/baseline_key_24" />
+
+    <!-- Action name text for the add person button -->
+    <!-- Make sure that you are constraining this Text
+         to the add Person FAB button -->
+    <TextView
+        android:id="@+id/add_access_key_action_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Adicionar nota com chave de acesso"
+        app:layout_constraintBottom_toBottomOf="@+id/addReceiptAccessKey"
+        app:layout_constraintEnd_toStartOf="@+id/addReceiptAccessKey"
+        app:layout_constraintTop_toTopOf="@+id/addReceiptAccessKey" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 <!--on below line we are creating a swipe to refresh layout-->
 <!--<RelativeLayout-->

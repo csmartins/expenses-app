@@ -45,7 +45,7 @@ class QRCodeScanner (
                 .response() { request, response, result ->
                     when (result) {
                         is Result.Failure -> {
-                            Log.e("QRCodeScanner:", "No receipts found..")
+                            Log.e("QRCodeScanner:", "Failed to send receipt")
                             val ex = result.getException()
                             ex.printStackTrace()
 //                            receiptAPIResult = "Erro ao enviar nota fiscal"
