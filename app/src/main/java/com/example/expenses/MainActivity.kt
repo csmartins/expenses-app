@@ -93,6 +93,11 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(this, QRCodeScannerActivity::class.java)
             this.startActivity(i)
         })
+        mAddReceiptAccessKeyFab.setOnClickListener(View.OnClickListener {
+            var ctx: Context
+            val i = Intent(this, AccessKeyFormActivity::class.java)
+            this.startActivity(i)
+        })
 
 //        mAddReceiptButton = findViewById(R.id.addReceipt)
 //        mAddReceiptButton.setOnClickListener(View.OnClickListener {

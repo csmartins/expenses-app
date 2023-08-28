@@ -59,14 +59,27 @@ class QRCodeScannerActivity : ComponentActivity() {
                     val barcodeResults =
                         qrCodeScanner.barCodeResults.collectAsStateWithLifecycle()
 //                    val apiResult = qrCodeScanner.receiptAPIResult
-                    ScanBarcode(
-                        qrCodeScanner::startScan,
-//                        qrCodeScanner.receiptAPIResult
-                    )
+//                    ScanBarcode(
+//                        qrCodeScanner::startScan,
+////                        qrCodeScanner.receiptAPIResult
+//                    )
+                    StartScanBarcode(onScanBarcode = qrCodeScanner::startScan)
+                    finish()
                 }
             }
         }
     }
+}
+
+@Composable
+private fun StartScanBarcode (
+    onScanBarcode: suspend () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(scope) {
+        onScanBarcode()
+    }
+
 }
 @Composable
 private fun ScanBarcode(

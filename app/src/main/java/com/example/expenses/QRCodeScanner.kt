@@ -37,8 +37,9 @@ class QRCodeScanner (
             val result = scanner.startScan().await()
             barCodeResults.value = result.rawValue
             result.rawValue?.let { Log.d("Barcode:", it) }
+
+//            sendReceipt(barCodeResults.value)
             val nfceURL = barCodeResults.value
-            var receiptSent = false
             val httpAsync = Fuel.post("http://192.168.0.11:8000/api/receipt")
                 .body("{ \"url\" : \"$nfceURL\" }")
                 .header("Content-Type", "application/json")
@@ -48,21 +49,23 @@ class QRCodeScanner (
                             Log.e("QRCodeScanner:", "Failed to send receipt")
                             val ex = result.getException()
                             ex.printStackTrace()
-//                            receiptAPIResult = "Erro ao enviar nota fiscal"
+                            //                            receiptAPIResult = "Erro ao enviar nota fiscal"
                         }
                         is Result.Success -> {
-                            receiptSent = true
                             Log.d("QRCodeScanner:", "Receipt sent with success.")
-//                            receiptAPIResult = "Nota fiscal enviada"
+                            //                            receiptAPIResult = "Nota fiscal enviada"
                         }
                     }
                 }
             httpAsync.join()
         } catch (e: Exception) {
+
             e.message?.let { Log.d("scan error: ", it) }
 //            Timber.d("scan error: $e")
         }
     }
+
+
 
     /* alt:
     scanner.startScan()
