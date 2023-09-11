@@ -1,45 +1,30 @@
 package com.example.expenses
 
-import android.content.pm.PackageManager
-import android.os.Bundle
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import com.example.expenses.ui.theme.QRCodeScannerTheme
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.camera.view.PreviewView
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import javax.inject.Inject
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.expenses.ui.theme.lightestGray
-import com.example.expenses.ui.theme.primary
-import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.expenses.ui.theme.QRCodeScannerTheme
 import com.example.expenses.ui.theme.Teal200
+import com.example.expenses.ui.theme.primary
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class QRCodeScannerActivity : ComponentActivity() {
@@ -64,7 +49,12 @@ class QRCodeScannerActivity : ComponentActivity() {
 ////                        qrCodeScanner.receiptAPIResult
 //                    )
                     StartScanBarcode(onScanBarcode = qrCodeScanner::startScan)
-                    finish()
+//                    finish()
+                    Log.d("qrcode-scanner", "finished scanning")
+
+                    val intent = Intent(this, MainActivity::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    this.startActivity(intent)
                 }
             }
         }

@@ -56,8 +56,7 @@ class QRCodeScanner (
                             //                            receiptAPIResult = "Nota fiscal enviada"
                         }
                     }
-                }
-            httpAsync.join()
+                }.join()
         } catch (e: Exception) {
 
             e.message?.let { Log.d("scan error: ", it) }
