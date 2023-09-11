@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAddFab: FloatingActionButton
     private lateinit var mAddReceiptQRCodeFab: FloatingActionButton
     private lateinit var mAddReceiptAccessKeyFab: FloatingActionButton
+    private lateinit var mShadowView: View
 
     // These are taken to make visible and invisible along with FABs
     private lateinit var addReceiptQRCodeActionText: TextView
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         mAddFab = findViewById(R.id.addFAB)
         mAddReceiptQRCodeFab = findViewById(R.id.addReceiptQRCode)
         mAddReceiptAccessKeyFab = findViewById(R.id.addReceiptAccessKey)
+        mShadowView = findViewById(R.id.shadowView)
 
         addReceiptQRCodeActionText = findViewById(R.id.add_qrcode_action_text)
         addReceiptAccessKeyActionText = findViewById(R.id.add_access_key_action_text)
@@ -76,14 +78,14 @@ class MainActivity : AppCompatActivity() {
                 mAddReceiptAccessKeyFab.show()
                 addReceiptQRCodeActionText.visibility = View.VISIBLE
                 addReceiptAccessKeyActionText.visibility = View.VISIBLE
-
+                mShadowView.visibility = View.VISIBLE
                 true
             } else {
                 mAddReceiptQRCodeFab.hide()
                 mAddReceiptAccessKeyFab.hide()
                 addReceiptQRCodeActionText.visibility = View.GONE
                 addReceiptAccessKeyActionText.visibility = View.GONE
-
+                mShadowView.visibility = View.GONE
                 false
             }).also { isAllFabsVisible = it }
         })
